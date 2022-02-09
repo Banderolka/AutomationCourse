@@ -9,14 +9,19 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.concurrent.TimeUnit;
+
+import static junit.framework.TestCase.assertEquals;
 
 
 public class InsuranceTest {
     WebDriver driver;
     String baseUrl;
+    String baseUrlIns;
+    WebDriver driverIns;
 
     @Before
     public void beforeTest(){
@@ -42,32 +47,57 @@ public class InsuranceTest {
         driver.findElement(By.xpath("//a//*[contains(text(), \"Оформить онлайн\")]")).click();
         driver.findElement(By.xpath("//a//*[contains(text(), \"Оформить на сайте\")]")).click();
 
-       String baseUrlIns = "https://online.sber.insure/store/travel/?_ga=2.153558577.827813117.1637922399-580027590.1637922399";
-//        WebDriver driverIns =  new ChromeDriver();
-        driver.get(baseUrlIns);
+        baseUrlIns = "https://online.sber.insure/store/travel/";
+        driverIns =  new ChromeDriver();
+        driverIns.get(baseUrlIns);
 
-        driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-//        driver.findElement(By.xpath("//*[contains(text(), \"Минимальная\")]")).click();
+        driverIns.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 
-//        WebDriverWait wait = new WebDriverWait(driver, 1000);
-////        wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[contains(text(), \"Оформить\")]")));
-////        driver.findElement(By.xpath("//*[contains(text(), \"Оформить\")]")).click();
+        driverIns.manage().window(). maximize();
+        driverIns.findElement(By.xpath("//*[contains(text(), \"Оформить\")]")).click();
 
-//        WebElement element= driver.findElement(By.xpath("//*[contains(text(),\"Оформить\")]"));
+        fildFaild(By.id("surname_vzr_ins_0"), "Lukinsky");
+        fildFaild(By.id("name_vzr_ins_0"), "Ivan");
+        fildFaild(By.id("birthDate_vzr_ins_0"), "27.09.1987");
+        driverIns.findElement(By.xpath("//*[contains(text(), \"гражданин РФ\")]")).click();
+        fildFaild(By.id("person_lastName"), "Гудименко");
+        fildFaild(By.id("person_firstName"), "Олег");
+        fildFaild(By.id("person_middleName"), "Александрович");
+        fildFaild(By.id("person_birthDate"), "25.02.1979");
+        driverIns.findElement(By.xpath("//html")).click();
+        driverIns.findElement(By.xpath("//*[contains(text(), \"Мужской\")]")).click();
+        fildFaild(By.id("passportSeries"), "1907");
+        fildFaild(By.id("passportNumber"), "000101");
+        fildFaild(By.id("documentDate"), "21.12.2001");
+        driverIns.findElement(By.xpath("//html")).click();
+        fildFaild(By.id("documentIssue"), "Паспортным столом города Тольятти");
 
-//        JavascriptExecutor executor = (JavascriptExecutor) driver;
-//        executor.executeScript("arguments[0].click();", element);
+        driverIns.findElement(By.xpath("//*[contains(text(), \"Продолжить\")]")).click();
 
-//        JavascriptExecutor jse = (JavascriptExecutor)driver;
-//        jse.executeScript("window.scrollTo(0," + element.getLocation().y + ")");
+        assertEquals("Lukinsky", driverIns.findElement(By.id("surname_vzr_ins_0")).getAttribute("value"));
+        assertEquals("Ivan", driverIns.findElement(By.id("name_vzr_ins_0")).getAttribute("value"));
+        assertEquals("27.09.1987", driverIns.findElement(By.id("birthDate_vzr_ins_0")).getAttribute("value"));//
+        assertEquals("Гудименко", driverIns.findElement(By.id("person_lastName")).getAttribute("value"));
+        assertEquals("Олег", driverIns.findElement(By.id("person_firstName")).getAttribute("value"));
+        assertEquals("Александрович", driverIns.findElement(By.id("person_middleName")).getAttribute("value"));
+        assertEquals("25.02.1979", driverIns.findElement(By.id("person_birthDate")).getAttribute("value"));
+        assertEquals("1907", driverIns.findElement(By.id("passportSeries")).getAttribute("value"));
+        assertEquals("000101", driverIns.findElement(By.id("passportNumber")).getAttribute("value"));
+        assertEquals("21.12.2001", driverIns.findElement(By.id("documentDate")).getAttribute("value"));
+        assertEquals("Паспортным столом города Тольятти", driverIns.findElement(By.id("documentIssue")).getAttribute("value"));
 
-//        driver.findElement((By.xpath("//*[contains(text(), \"Контакты\")]"))).click();
-        ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView();"
-                , driver.findElement(By.xpath("//*[contains(text(), \"Контакты\")]")));
+        Assert.assertEquals("Поле не заполнено.",
+                driverIns.findElement(By.xpath("//*[contains(text(), \"Поле не заполнено.\")]")).getText());
 
-        Actions actions = new Actions(driver);
-        actions.moveToElement(driver.findElement(By.xpath("//*[contains(text(), \"Оформить\")]"))).build().perform();
-        driver.findElement(By.xpath("//*[contains(text(), \"Оформить\")]")).click();
+        Assert.assertEquals("При заполнении данных произошла ошибка",
+                driverIns.findElement(By.xpath("//*[@class=\"alert-form alert-form-error\"]")).getText());
+
+
+    }
+
+    public void fildFaild(By locator, String value){
+        driverIns.findElement(locator).clear();
+        driverIns.findElement(locator).sendKeys(value);
     }
 
     @After
