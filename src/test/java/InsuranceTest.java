@@ -58,21 +58,21 @@ public class InsuranceTest {
         driver.manage().window(). maximize();
         driver.findElement(By.xpath("//*[contains(text(), \"Оформить\")]")).click();
 
-        fildFaild(By.id("surname_vzr_ins_0"), "Lukinsky");
-        fildFaild(By.id("name_vzr_ins_0"), "Ivan");
-        fildFaild(By.id("birthDate_vzr_ins_0"), "27.09.1987");
+        fillField(By.id("surname_vzr_ins_0"), "Lukinsky");
+        fillField(By.id("name_vzr_ins_0"), "Ivan");
+        fillField(By.id("birthDate_vzr_ins_0"), "27.09.1987");
         driver.findElement(By.xpath("//*[contains(text(), \"гражданин РФ\")]")).click();
-        fildFaild(By.id("person_lastName"), "Гудименко");
-        fildFaild(By.id("person_firstName"), "Олег");
-        fildFaild(By.id("person_middleName"), "Александрович");
-        fildFaild(By.id("person_birthDate"), "25.02.1979");
+        fillField(By.id("person_lastName"), "Гудименко");
+        fillField(By.id("person_firstName"), "Олег");
+        fillField(By.id("person_middleName"), "Александрович");
+        fillField(By.id("person_birthDate"), "25.02.1979");
         driver.findElement(By.xpath("//html")).click();
         driver.findElement(By.xpath("//*[contains(text(), \"Мужской\")]")).click();
-        fildFaild(By.id("passportSeries"), "1907");
-        fildFaild(By.id("passportNumber"), "000101");
-        fildFaild(By.id("documentDate"), "21.12.2001");
+        fillField(By.id("passportSeries"), "1907");
+        fillField(By.id("passportNumber"), "000101");
+        fillField(By.id("documentDate"), "21.12.2001");
         driver.findElement(By.xpath("//html")).click();
-        fildFaild(By.id("documentIssue"), "Паспортным столом города Тольятти");
+        fillField(By.id("documentIssue"), "Паспортным столом города Тольятти");
 
         driver.findElement(By.xpath("//*[contains(text(), \"Продолжить\")]")).click();
 
@@ -101,7 +101,7 @@ public class InsuranceTest {
 
     }
 
-    public void fildFaild(By locator, String value){
+    public void fillField(By locator, String value){
         driver.findElement(locator).clear();
         driver.findElement(locator).sendKeys(value);
     }
